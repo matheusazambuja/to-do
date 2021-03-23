@@ -5,6 +5,7 @@ import React, { useState } from "react"
 import { Input } from "@chakra-ui/input"
 import { Button } from "@chakra-ui/button"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { CircularProgress, CircularProgressLabel } from "@chakra-ui/progress"
 
 interface Task {
   id: number
@@ -12,9 +13,54 @@ interface Task {
   isComplete: boolean
 }
 
+interface DateNow {
+  seconds: string,
+  minutes: string,
+  hours: string,
+  dayOfWeek: string,
+  day: string,
+  month: string,
+  year: string
+}
+
+
+function capitalize(string: string) {
+  return string.charAt(0).toUpperCase() + string.slice(1)
+}
+
+function formatDateTime(minuteOrHour: string) {
+  if (minuteOrHour.length === 1) return '0'.concat(minuteOrHour)
+  return minuteOrHour
+}
+
+
 export default function TaskList() {
+  const [dateNow, setDateNow] = useState<DateNow>({} as DateNow)
   const [tasks, setTasks] = useState<Task[]>([])
   const [newTaskTitle, setNewTaskTitle] = useState('')
+
+  
+  setTimeout(() => {
+    const dateCurrent = new Date()
+    setDateNow({
+      seconds: formatDateTime(dateCurrent.toLocaleTimeString('default', { second: '2-digit' })),
+      minutes: formatDateTime(dateCurrent.toLocaleTimeString('default', { minute: '2-digit' })),
+      hours: formatDateTime(dateCurrent.toLocaleTimeString('default', { hour: '2-digit' })),
+      dayOfWeek: capitalize(dateCurrent.toLocaleDateString('default', { weekday: 'long' })),
+      day: dateCurrent.toLocaleDateString('default', { day: 'numeric' }),
+      month: capitalize(dateCurrent.toLocaleDateString('default', { month: 'long' })),
+      year: dateCurrent.toLocaleDateString('default', { year: 'numeric' })
+    })
+  }, 1000)
+
+  function quantTaskListComplete(tasks: Task[]) {
+    const countTaskList = tasks.length
+    const countTaskListCompleted = tasks.filter(task => {
+      return task.isComplete
+    }).length
+
+    return countTaskList ? Math.round((countTaskListCompleted / countTaskList) * 100) : 0
+  }
 
   function handleCreateNewTask() {
     const id = Math.floor(Math.random() * 1000)
@@ -66,7 +112,7 @@ export default function TaskList() {
     paddingLeft: '1.2rem',
     borderRadius: '12px',
 
-    background: 'whiteAlpha.200',
+    background: 'whiteAlpha.100',
   }
 
   return (
@@ -92,22 +138,108 @@ export default function TaskList() {
 
       <Flex as='header'
         gridArea='header'
+
+        direction='column'
         alignItems='center'
-        justifyContent='space-between'
 
         background='gray.700'
         color='white'
+
+        borderRadius='10px 10px 0px 0px'
 
         paddingTop='1rem'
         paddingBottom='0.7rem'
 
       >
-        <Heading
-          width='100%'
-          textAlign='center'
+        <Flex as='div'
+          alignItems='center'
+          justifyContent='space-between'
+          width='83%'
+
+          marginBottom='1rem'
         >
-          Todo List
-        </Heading>
+          <Flex as='span'
+            alignItems='center'
+            justifyContent='center'
+          >
+            <Text as='span'
+              color='blue.500'
+              fontSize='1.6rem'
+              marginRight='0.6rem'
+            >
+              <FontAwesomeIcon icon='list-alt' />
+            </Text>
+            <Heading
+              fontSize='2.2rem'
+              marginLeft='0.6rem'
+            >
+              Todo List
+            </Heading>
+          </Flex>
+
+          <Flex as='span'
+            direction='column'
+            alignItems='center'
+            justifyContent='center'
+            textAlign='center'
+          >
+
+            <Text as='span'
+              fontSize='2.7rem'
+              fontWeight='medium'
+            >
+              {dateNow.hours}:{dateNow.minutes}
+            </Text>
+
+            <Text as='span'
+              color='whiteAlpha.800'
+              fontSize='0.8rem'
+              fontWeight='medium'
+            >
+              {dateNow.dayOfWeek}
+            </Text>
+            <Text as='span'
+              color='whiteAlpha.500'
+              fontSize='0.8rem'
+              fontWeight='medium'
+            >
+              {dateNow.day} {dateNow.month} {dateNow.year}
+            </Text>
+          </Flex>
+        </Flex>
+
+        <Flex as='div'
+          alignItems='center'
+          justifyContent='center'
+
+          width='100%'
+          marginRight='0.8rem'
+        >
+          <Input id='input-title'
+            type='text'
+            placeholder='Add new task'
+            onChange={(e) => setNewTaskTitle(e.target.value)}
+
+            background='whiteAlpha.300'
+            fontWeight='medium'
+            
+            border='0'
+            width='60%'
+            marginRight='0.3rem'
+            marginTop='5px'
+            marginBottom='5px'
+          />
+          <Button type='submit' onClick={handleCreateNewTask}
+            background='transparent'
+            color='white'
+
+            _hover={{
+              background: 'whiteAlpha.200',
+            }}
+          >
+            <FontAwesomeIcon icon='plus'/>
+          </Button>
+        </Flex>
 
       </Flex>
 
@@ -115,7 +247,7 @@ export default function TaskList() {
         gridArea='content'
         direction='column'
 
-        padding='1.9rem 3.5rem'
+        padding='0.5rem 4.2rem 1.9rem 1.8rem'
         
         background='gray.700'
         color='white'
@@ -149,7 +281,8 @@ export default function TaskList() {
                   </Button>
 
                   <Text as='s'
-                    color='gray.500'
+                    color='gray.300'
+                    fontWeight='medium'
                     marginBottom='5px'
                   >
                     {task.title}
@@ -220,6 +353,7 @@ export default function TaskList() {
               <Text as='span'
                 background='transparent'
                 color='white'
+                fontWeight='medium'
                 textAlign='center'
               >
                 No tasks
@@ -231,54 +365,52 @@ export default function TaskList() {
       </Flex>
       <Flex as='footer'
         gridArea='footer'
-        direction='row'
         alignItems='center'
         justifyContent='space-between'
 
-        background='gray.400'
+        background='gray.900'
         color='white'
 
-        paddingLeft='2rem'
+        borderRadius='0px 0px 10px 10px'
+
+        padding='0 2rem'
       >
         <Text as='span'
           color='whiteAlpha.800'
+          fontWeight='medium'
         >
           {
             tasks.filter(task => {
               return !task.isComplete
             }).length
-          } TASKS
+          } REMAINING TASKS
         </Text>
 
-        <Flex as='div'
-          alignItems='center'
-          justifyContent='center'
-          marginRight='0.8rem'
+        <CircularProgress value={quantTaskListComplete(tasks)}
+
+          color='green.500'
+          size='67'
         >
-          <Input id='input-title'
-            type='text'
-            placeholder='Add new task'
-            onChange={(e) => setNewTaskTitle(e.target.value)}
+          <CircularProgressLabel fontSize='1.3rem' fontWeight='medium'>
+            {quantTaskListComplete(tasks)}
+            <Text as='span'
+              position='relative'
+              left='1px'
+              top='-4px'
 
-            background='gray.500'
-            border='0'
-            width='17rem'
-            marginRight='0.3rem'
-            marginTop='5px'
-            marginBottom='5px'
-          />
-          <Button type='submit' onClick={handleCreateNewTask}
-            background='transparent'
-            color='white'
+              color='blackAlpha.800'
 
-            _hover={{
-              background: 'whiteAlpha.300',
-            }}
-          >
-            <FontAwesomeIcon icon='plus'/>
-          </Button>
-        </Flex>
+              fontSize='0.92rem'
+              fontWeight='bold'
+            >
+              %
+            </Text>
+          </CircularProgressLabel>
+        </CircularProgress>
       </Flex>
     </Grid>
   )
+}
+
+export async function getStaticProps() {
 }
