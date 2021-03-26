@@ -1,17 +1,13 @@
 import Head from "next/head"
 
-import { Box, Flex, Grid, Heading, ListItem, Text, UnorderedList } from "@chakra-ui/layout"
-import React, { useState } from "react"
+import { Box, Flex, Heading, ListItem, Text, UnorderedList } from "@chakra-ui/layout"
+import React, { useContext, useEffect, useState } from "react"
 import { Input } from "@chakra-ui/input"
 import { Button } from "@chakra-ui/button"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { CircularProgress, CircularProgressLabel } from "@chakra-ui/progress"
 
-interface Task {
-  id: number
-  title: string
-  isComplete: boolean
-}
+import { GroupAndTaskListContext, Task, TaskGroup } from "../contexts/GroupAndTaskListContext"
 
 interface DateNow {
   seconds: string,
@@ -33,13 +29,17 @@ function formatDateTime(minuteOrHour: string) {
   return minuteOrHour
 }
 
-
 export default function TaskList() {
-  const [dateNow, setDateNow] = useState<DateNow>({} as DateNow)
-  const [tasks, setTasks] = useState<Task[]>([])
-  const [newTaskTitle, setNewTaskTitle] = useState('')
 
-  
+  const {
+    getTaskGroupSelected,
+    createNewTask,
+    removeTask,
+    toggleTaskCompletion
+  } = useContext(GroupAndTaskListContext)
+
+  const [dateNow, setDateNow] = useState<DateNow>({} as DateNow)
+    
   setTimeout(() => {
     const dateCurrent = new Date()
     setDateNow({
@@ -53,42 +53,24 @@ export default function TaskList() {
     })
   }, 1000)
 
-  function quantTaskListComplete(tasks: Task[]) {
-    const countTaskList = tasks.length
-    const countTaskListCompleted = tasks.filter(task => {
-      return task.isComplete
-    }).length
+  function handleCreateNewTask(): void {
+    const titleNewTask = document.querySelector('#input-title') as HTMLInputElement
 
-    return countTaskList ? Math.round((countTaskListCompleted / countTaskList) * 100) : 0
-  }
-
-  function handleCreateNewTask() {
-    const id = Math.floor(Math.random() * 1000)
-    if(newTaskTitle == '') {
-      // Gerar erro
-      return
+    if (titleNewTask.value === '') {
+      // gerar erro
+      return 
     }
-    const task = { id: id, title: newTaskTitle, isComplete: false }
-    setTasks([ ...tasks, task ])
-
-    const inputTitle = document.querySelector('#input-title') as HTMLInputElement
-    inputTitle.value = ''
-    setNewTaskTitle('')
-    // Não houve erro
+    createNewTask(titleNewTask.value)
+    titleNewTask.value = ''
+    // Não foi gerado erro
   }
 
-  function handleToggleTaskCompletion(id: number) {
-    const newTasksList = tasks.filter(task => {
-      return task.id === id ? (task.isComplete = !task.isComplete) || true : true
-    })
-    setTasks(newTasksList)
+  function handleRemoveTask(index: number): void {
+    removeTask(index)
   }
 
-  function handleRemoveTask(id: number) {
-    const newTasksList = tasks.filter(task => {
-      return task.id != id
-    })
-    setTasks(newTasksList)
+  function handleToggleTaskCompletion(index: number): void {
+    toggleTaskCompletion(index)
   }
 
   const buttonsTaskCompletionStyle = {
@@ -116,26 +98,7 @@ export default function TaskList() {
   }
 
   return (
-    <Grid as='div'
-      templateColumns='0.7fr 1.9fr 0.7fr'
-      templateRows='0.6fr 0.6fr 2.8fr 0.4fr 0.6fr'
-      templateAreas="
-        '. . .'
-        '. header .'
-        '. content .'
-        '. footer .'
-        '. . .'
-      "
-      height='100vh'
-
-      overflow='auto'
-
-      background='gray.600'
-    >
-      <Head>
-        <title>Home - Todo</title>
-      </Head>
-
+    <>
       <Flex as='header'
         gridArea='header'
 
@@ -218,7 +181,6 @@ export default function TaskList() {
           <Input id='input-title'
             type='text'
             placeholder='Add new task'
-            onChange={(e) => setNewTaskTitle(e.target.value)}
 
             background='whiteAlpha.300'
             fontWeight='medium'
@@ -229,7 +191,7 @@ export default function TaskList() {
             marginTop='5px'
             marginBottom='5px'
           />
-          <Button type='submit' onClick={handleCreateNewTask}
+          <Button type='submit' onClick={() => handleCreateNewTask()}
             background='transparent'
             color='white'
 
@@ -257,17 +219,17 @@ export default function TaskList() {
         >
           <UnorderedList
           >
-            {tasks.length != 0 ? tasks.map(task => (
-              task.isComplete ? 
-              <ListItem key={task.id}
+            {getTaskGroupSelected().tasks.length !== 0 ? getTaskGroupSelected().tasks.map((task, index) => (
+              task.isCompleted ? 
+              <ListItem key={index}
                 {...listItemStyle}
               >
                 <Flex as='div'
                   alignItems='center'
                 >
                   <Button
-                    checked={task.isComplete}
-                    onClick={() => handleToggleTaskCompletion(task.id)}
+                    checked={task.isCompleted}
+                    onClick={() => handleToggleTaskCompletion(index)}
 
                     {...buttonsTaskCompletionStyle}
                     color='green.400'
@@ -289,7 +251,7 @@ export default function TaskList() {
                   </Text>
                 </Flex>
                 <Button type='button'
-                  onClick={() => handleRemoveTask(task.id)}
+                  onClick={() => handleRemoveTask(index)}
 
                   background='red.600'
                   fontSize='0.9rem'
@@ -305,15 +267,15 @@ export default function TaskList() {
                   <FontAwesomeIcon icon='trash' />
                 </Button>
               </ListItem> :
-              <ListItem key={task.id}
+              <ListItem key={index}
                 {...listItemStyle}
               >
                 <Flex as='div'
                   alignItems='center'
                 >
                   <Button
-                    checked={task.isComplete}
-                    onClick={() => handleToggleTaskCompletion(task.id)}
+                    checked={task.isCompleted}
+                    onClick={() => handleToggleTaskCompletion(index)}
 
                     {...buttonsTaskCompletionStyle}
                     color='white'
@@ -326,13 +288,14 @@ export default function TaskList() {
                   </Button>
 
                   <Text as='p'
+                    fontWeight='medium'
                     marginBottom='5px'
                   >
                     {task.title}
                   </Text>
                 </Flex>
                 <Button type='button'
-                  onClick={() => handleRemoveTask(task.id)}
+                  onClick={() => handleRemoveTask(index)}
 
                   background='red.600'
                   fontSize='0.9rem'
@@ -380,19 +343,19 @@ export default function TaskList() {
           fontWeight='medium'
         >
           {
-            tasks.filter(task => {
-              return !task.isComplete
-            }).length
+            getTaskGroupSelected().quantityTasksIncompleted
           } REMAINING TASKS
         </Text>
 
-        <CircularProgress value={quantTaskListComplete(tasks)}
-
+        <CircularProgress value={getTaskGroupSelected().tasks.length === 0 ? 0 : Math.round(getTaskGroupSelected().quantityTasksCompleted / getTaskGroupSelected().tasks.length * 100)}
           color='green.500'
           size='67'
         >
           <CircularProgressLabel fontSize='1.3rem' fontWeight='medium'>
-            {quantTaskListComplete(tasks)}
+            {
+              getTaskGroupSelected().tasks.length === 0 ? 0 : 
+                Math.round(getTaskGroupSelected().quantityTasksCompleted / getTaskGroupSelected().tasks.length * 100)
+            }
             <Text as='span'
               position='relative'
               left='1px'
@@ -408,9 +371,6 @@ export default function TaskList() {
           </CircularProgressLabel>
         </CircularProgress>
       </Flex>
-    </Grid>
+    </>
   )
-}
-
-export async function getStaticProps() {
 }
