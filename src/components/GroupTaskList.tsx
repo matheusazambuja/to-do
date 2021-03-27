@@ -32,8 +32,8 @@ export default function GroupTaskList() {
     // Não houve erro
   }
 
-  function hanldeRemoveTaskGroup(index: number) {
-    removeTaskGroup(index)
+  function hanldeRemoveTaskGroup(indexTaskGroup: number) {
+    removeTaskGroup(indexTaskGroup)
   }
 
   return (
@@ -43,9 +43,9 @@ export default function GroupTaskList() {
         direction='column'
         alignItems='center'
       >
-        {taskGroupsList.map((group, index) => (
+        {taskGroupsList.map((group, indexTaskGroup) => (
           group.isSelected ? 
-          <Button as='div' id={String(index)}
+          <Button as='div' key={Number(indexTaskGroup)}
             flexDirection='column'
             alignItems='flex-start'
             justifyContent='space-between'
@@ -76,7 +76,7 @@ export default function GroupTaskList() {
                 {group.name}
               </Text>
 
-              <Box as='span' onClick={() => hanldeRemoveTaskGroup(index)}
+              <Box as='span' onClick={() => hanldeRemoveTaskGroup(indexTaskGroup)}
                 paddingRight='0.5rem'
                 paddingTop='0.1rem'
               >
@@ -109,7 +109,7 @@ export default function GroupTaskList() {
             </Flex>
           </Button> 
           : 
-          <Button as='div' id={String(index)} onClick={() => selectTaskGroup(index, taskGroupsList)}
+          <Button as='div' key={Number(indexTaskGroup)} onClick={() => selectTaskGroup(indexTaskGroup, taskGroupsList)}
             flexDirection='column'
             alignItems='flex-start'
             justifyContent='space-between'

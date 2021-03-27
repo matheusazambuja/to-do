@@ -97,10 +97,6 @@ export function GroupAndTaskListProvider({ children }: GroupAndTaskListProviderP
     return taskGroupSelected
   }
 
-  useEffect(() => {
-    console.log(taskGroupsList)
-  }, [taskGroupsList])
-
   // ********************************************************************
 
   function createNewTask(titleTask: string) {

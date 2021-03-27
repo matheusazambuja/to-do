@@ -1,13 +1,11 @@
-import Head from "next/head"
-
 import { Box, Flex, Heading, ListItem, Text, UnorderedList } from "@chakra-ui/layout"
-import React, { useContext, useEffect, useState } from "react"
+import React, { useContext, useState } from "react"
 import { Input } from "@chakra-ui/input"
 import { Button } from "@chakra-ui/button"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { CircularProgress, CircularProgressLabel } from "@chakra-ui/progress"
 
-import { GroupAndTaskListContext, Task, TaskGroup } from "../contexts/GroupAndTaskListContext"
+import { GroupAndTaskListContext } from "../contexts/GroupAndTaskListContext"
 
 interface DateNow {
   seconds: string,
@@ -144,7 +142,9 @@ export default function TaskList() {
             direction='column'
             alignItems='center'
             justifyContent='center'
-            textAlign='center'
+
+            width='6rem'
+            height='6rem'
           >
 
             <Text as='span'
@@ -219,9 +219,9 @@ export default function TaskList() {
         >
           <UnorderedList
           >
-            {getTaskGroupSelected().tasks.length !== 0 ? getTaskGroupSelected().tasks.map((task, index) => (
+            {getTaskGroupSelected().tasks.length !== 0 ? getTaskGroupSelected().tasks.map((task, indexTask) => (
               task.isCompleted ? 
-              <ListItem key={index}
+              <ListItem key={indexTask}
                 {...listItemStyle}
               >
                 <Flex as='div'
@@ -229,7 +229,7 @@ export default function TaskList() {
                 >
                   <Button
                     checked={task.isCompleted}
-                    onClick={() => handleToggleTaskCompletion(index)}
+                    onClick={() => handleToggleTaskCompletion(indexTask)}
 
                     {...buttonsTaskCompletionStyle}
                     color='green.400'
@@ -251,7 +251,7 @@ export default function TaskList() {
                   </Text>
                 </Flex>
                 <Button type='button'
-                  onClick={() => handleRemoveTask(index)}
+                  onClick={() => handleRemoveTask(indexTask)}
 
                   background='red.600'
                   fontSize='0.9rem'
@@ -267,7 +267,7 @@ export default function TaskList() {
                   <FontAwesomeIcon icon='trash' />
                 </Button>
               </ListItem> :
-              <ListItem key={index}
+              <ListItem key={indexTask}
                 {...listItemStyle}
               >
                 <Flex as='div'
@@ -275,7 +275,7 @@ export default function TaskList() {
                 >
                   <Button
                     checked={task.isCompleted}
-                    onClick={() => handleToggleTaskCompletion(index)}
+                    onClick={() => handleToggleTaskCompletion(indexTask)}
 
                     {...buttonsTaskCompletionStyle}
                     color='white'
@@ -295,7 +295,7 @@ export default function TaskList() {
                   </Text>
                 </Flex>
                 <Button type='button'
-                  onClick={() => handleRemoveTask(index)}
+                  onClick={() => handleRemoveTask(indexTask)}
 
                   background='red.600'
                   fontSize='0.9rem'
