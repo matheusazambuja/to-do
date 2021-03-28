@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { CircularProgress, CircularProgressLabel } from "@chakra-ui/progress"
 
 import { GroupAndTaskListContext } from "../contexts/GroupAndTaskListContext"
+import { GetStaticProps } from "next"
 
 interface DateNow {
   seconds: string,
@@ -36,11 +37,15 @@ export default function TaskList() {
     toggleTaskCompletion
   } = useContext(GroupAndTaskListContext)
 
-  const [dateNow, setDateNow] = useState<DateNow>({} as DateNow)
+  const [dateNow, setDateNow] = useState<DateNow>(setCurrentDateTime())
     
   setTimeout(() => {
+    setDateNow(setCurrentDateTime())
+  }, 1000)
+
+  function setCurrentDateTime(): DateNow {
     const dateCurrent = new Date()
-    setDateNow({
+    return {
       seconds: formatDateTime(dateCurrent.toLocaleTimeString('default', { second: '2-digit' })),
       minutes: formatDateTime(dateCurrent.toLocaleTimeString('default', { minute: '2-digit' })),
       hours: formatDateTime(dateCurrent.toLocaleTimeString('default', { hour: '2-digit' })),
@@ -48,8 +53,8 @@ export default function TaskList() {
       day: dateCurrent.toLocaleDateString('default', { day: 'numeric' }),
       month: capitalize(dateCurrent.toLocaleDateString('default', { month: 'long' })),
       year: dateCurrent.toLocaleDateString('default', { year: 'numeric' })
-    })
-  }, 1000)
+    } as DateNow
+  }
 
   function handleCreateNewTask(): void {
     const titleNewTask = document.querySelector('#input-title') as HTMLInputElement
@@ -124,9 +129,11 @@ export default function TaskList() {
             justifyContent='center'
           >
             <Text as='span'
-              color='blue.500'
+              color='whiteAlpha.600'
               fontSize='1.6rem'
-              marginRight='0.6rem'
+
+              marginRight='0.4rem'
+              paddingTop='0.4rem'
             >
               <FontAwesomeIcon icon='list-alt' />
             </Text>
@@ -134,7 +141,7 @@ export default function TaskList() {
               fontSize='2.2rem'
               marginLeft='0.6rem'
             >
-              Todo List
+              {getTaskGroupSelected().name}
             </Heading>
           </Flex>
 
@@ -196,10 +203,11 @@ export default function TaskList() {
             color='white'
 
             _hover={{
-              background: 'whiteAlpha.200',
+              background: 'whiteAlpha.100',
+              color: 'green.400'
             }}
           >
-            <FontAwesomeIcon icon='plus'/>
+            <FontAwesomeIcon icon='check'/>
           </Button>
         </Flex>
 
@@ -313,11 +321,13 @@ export default function TaskList() {
               </ListItem>
             ))
             :
-              <Text as='span'
+              <Text as='p'
                 background='transparent'
                 color='white'
                 fontWeight='medium'
-                textAlign='center'
+                fontStyle='italic'
+
+                paddingTop='1rem'
               >
                 No tasks
               </Text>

@@ -16,7 +16,7 @@ export default function GroupTaskList() {
     selectTaskGroup,
   } = useContext(GroupAndTaskListContext)
 
-  const [clickedInButtonNewGroup, setClickedInButtonNewGroup] = useState(false)
+  const [isClickedButtonNewGroup, setIsClickedButtonNewGroup] = useState(false)
 
   function handleNewTaskGroup() {
     const inputNameGroup = document.querySelector('#input-name-new-group') as HTMLInputElement
@@ -28,11 +28,11 @@ export default function GroupTaskList() {
 
     createNewTaskGroup(inputNameGroup.value)
     inputNameGroup.value = ''
-    setClickedInButtonNewGroup(false)
+    setIsClickedButtonNewGroup(false)
     // Não houve erro
   }
 
-  function hanldeRemoveTaskGroup(indexTaskGroup: number) {
+  function handleRemoveTaskGroup(indexTaskGroup: number) {
     removeTaskGroup(indexTaskGroup)
   }
 
@@ -76,7 +76,7 @@ export default function GroupTaskList() {
                 {group.name}
               </Text>
 
-              <Box as='span' onClick={() => hanldeRemoveTaskGroup(indexTaskGroup)}
+              <Box as='span' onClick={() => handleRemoveTaskGroup(indexTaskGroup)}
                 paddingRight='0.5rem'
                 paddingTop='0.1rem'
               >
@@ -143,7 +143,6 @@ export default function GroupTaskList() {
 
               marginTop='0.2rem'
               width='100%'
-
             >
               <Text as='span'
                 color='whiteAlpha.600'
@@ -163,8 +162,8 @@ export default function GroupTaskList() {
           </Button>
           ))
         }
-        {!clickedInButtonNewGroup ?
-          <Button onClick={() => setClickedInButtonNewGroup(true)}
+        {!isClickedButtonNewGroup ?
+          <Button onClick={() => setIsClickedButtonNewGroup(true)}
             display='flex'
             alignItems='center'
             justifyContent='center'
@@ -194,6 +193,8 @@ export default function GroupTaskList() {
           <Flex as='div'
             alignItems='center'
             justifyContent='center'
+
+            transition="all 200ms"
           >
             <Input id='input-name-new-group'
               type='text'
@@ -204,6 +205,7 @@ export default function GroupTaskList() {
               
               border='0'
               width='60%'
+              height='1.9rem'
               marginRight='0.3rem'
               marginTop='5px'
               marginBottom='5px'
@@ -213,8 +215,12 @@ export default function GroupTaskList() {
               }}
             />
             <Button type='submit' onClick={() => handleNewTaskGroup()}
+              height='2rem'
+              width='0.5rem'
+
               background='transparent'
               color='white'
+              fontSize='0.8rem'
 
               _hover={{
                 background: 'whiteAlpha.200',
@@ -222,9 +228,13 @@ export default function GroupTaskList() {
             >
               <FontAwesomeIcon icon='plus'/>
             </Button>
-            <Button type='submit' onClick={() => setClickedInButtonNewGroup(false)}
+            <Button type='submit' onClick={() => setIsClickedButtonNewGroup(false)}
+              height='2rem'
+              width='0.5rem'
+
               background='transparent'
               color='white'
+              fontSize='0.8rem'
 
               _hover={{
                 background: 'whiteAlpha.200',
