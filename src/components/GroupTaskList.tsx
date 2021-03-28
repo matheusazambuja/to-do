@@ -1,5 +1,5 @@
 
-import { Button } from '@chakra-ui/button'
+import { Button, ButtonProps } from '@chakra-ui/button'
 import { Input } from '@chakra-ui/input'
 import { Box, Flex, Text } from '@chakra-ui/layout'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -36,6 +36,27 @@ export default function GroupTaskList() {
     removeTaskGroup(indexTaskGroup)
   }
 
+  const buttonTaskGroupsStyle: ButtonProps = {
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
+    width: '90%',
+    height: '4.7rem',
+
+    padding: '0.35rem 0.7rem 0.6rem 1.3rem',
+    marginBottom: '1rem',
+
+    color: 'white',
+    borderRadius: '12px',
+
+    transition: 'all 200ms',
+
+    _hover: {
+      background: 'whiteAlpha.400',
+      cursor: 'pointer'
+    }
+  }
+
   return (
     <>
       <Flex as='div'
@@ -46,24 +67,10 @@ export default function GroupTaskList() {
         {taskGroupsList.map((group, indexTaskGroup) => (
           group.isSelected ? 
           <Button as='div' key={Number(indexTaskGroup)}
-            flexDirection='column'
-            alignItems='flex-start'
-            justifyContent='space-between'
-            width='90%'
-            height='4.3rem'
-
-            padding='0.35rem 0.7rem 0.6rem 1.3rem'
-            marginBottom='1rem'
+            {...buttonTaskGroupsStyle}
 
             background='gray.600'
-            color='white'
             shadow='0px 0px 4px 0px black'
-            borderRadius='12px'
-
-            _hover={{
-              background: 'whiteAlpha.400',
-              cursor: 'pointer'
-            }}
           >
             <Flex as='div'
               width='100%'
@@ -71,6 +78,7 @@ export default function GroupTaskList() {
               justifyContent='space-between'
             >
               <Text as='span'
+                fontSize='1.4rem'
                 fontWeight='medium'
               >
                 {group.name}
@@ -110,29 +118,13 @@ export default function GroupTaskList() {
           </Button> 
           : 
           <Button as='div' key={Number(indexTaskGroup)} onClick={() => selectTaskGroup(indexTaskGroup, taskGroupsList)}
-            flexDirection='column'
-            alignItems='flex-start'
-            justifyContent='space-between'
-            width='90%'
-            height='4.3rem'
 
-            padding='0.35rem 0.7rem 0.6rem 1.3rem'
-            marginBottom='1rem'
-
+            {...buttonTaskGroupsStyle}
             background='gray.700'
-            color='white'
-            // shadow='0px 0px 7px 0px black'
-            borderRadius='12px'
-
-            _hover={{
-              background: 'whiteAlpha.400',
-              cursor: 'pointer'
-            }}
           >
             <Text as='span'
-              textAlign='center'
+              fontSize='1.3rem'
               fontWeight='medium'
-
             >
               {group.name}
             </Text>

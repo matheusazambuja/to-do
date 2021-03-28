@@ -197,6 +197,10 @@ export default function TaskList() {
             marginRight='0.3rem'
             marginTop='5px'
             marginBottom='5px'
+
+            _focus={{
+              background: 'white'
+            }}
           />
           <Button type='submit' onClick={() => handleCreateNewTask()}
             background='transparent'
@@ -292,7 +296,7 @@ export default function TaskList() {
                       color: 'green.400'
                     }}
                   >
-                    <FontAwesomeIcon icon='circle' />
+                    <FontAwesomeIcon icon={['far', 'circle']} />
                   </Button>
 
                   <Text as='p'
