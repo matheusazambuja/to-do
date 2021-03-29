@@ -97,11 +97,14 @@ export default function GroupTaskList() {
         {taskGroupsList.map((group, indexTaskGroup) => (
           group.isSelected ? 
           <motion.div
+            initial={{ opacity: 0, x: -100 }}
+            animate={{ opacity: 1, x: 0 }}
             whileHover={{ 
               x: 3,
               y: -3,
               transition: { duration: 0.2 }
             }}
+            transition={{ ease: 'easeInOut', duration: 0.5 }}
           >
             <Button as='div' key={Number(indexTaskGroup)}
               {...buttonTaskGroupsStyle}
@@ -156,11 +159,14 @@ export default function GroupTaskList() {
           </motion.div>
           : 
           <motion.div
+            initial={{ opacity: 0, x: -100 }}
+            animate={{ opacity: 1, x: 0 }}
             whileHover={{ 
               x: 3,
               y: -3,
               transition: { duration: 0.2 }
             }}
+            transition={{ ease: 'easeInOut', duration: 0.5 }}
           >
             <Button as='div' key={Number(indexTaskGroup)} onClick={() => selectTaskGroup(indexTaskGroup, taskGroupsList)}
               {...buttonTaskGroupsStyle}
@@ -201,39 +207,45 @@ export default function GroupTaskList() {
           ))
         }
         {!isClickedButtonNewGroup ?
-          <Button onClick={() => setIsClickedButtonNewGroup(true)}
-            display='flex'
-            alignItems='center'
-            justifyContent='center'
-
-            background='blue.400'
-            color='whiteAlpha.800'
-            fontSize='0.9rem'
-
-            width='12rem'
-            height='2.2rem'
-
-            marginLeft='7px'
-            _hover={{
-              background: 'blue.500',
-              color: 'whiteAlpha.900'
-            }}
+          <motion.div
+            initial={{ opacity: 0, x: -100 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ ease: 'easeInOut', duration: 0.6 }}
           >
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ ease: 'easeInOut', duration: 0.2 }}
+            <Button onClick={() => setIsClickedButtonNewGroup(true)}
+              display='flex'
+              alignItems='center'
+              justifyContent='center'
+
+              background='blue.400'
+              color='whiteAlpha.800'
+              fontSize='0.9rem'
+
+              width='12rem'
+              height='2.2rem'
+
+              marginLeft='7px'
+              _hover={{
+                background: 'blue.500',
+                color: 'whiteAlpha.900'
+              }}
             >
-              <FontAwesomeIcon icon='plus' />
-              <Text as='span'
-                
-                marginLeft='0.5rem'
-                marginBottom='0.1rem'
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ ease: 'easeInOut', duration: 0.6 }}
               >
-                CREATE NEW GROUP
-              </Text>
-            </motion.div>
-          </Button>
+                <FontAwesomeIcon icon='plus' />
+                <Text as='span'
+                  
+                  marginLeft='0.5rem'
+                  marginBottom='0.1rem'
+                >
+                  CREATE NEW GROUP
+                </Text>
+              </motion.div>
+            </Button>
+          </motion.div>
           :
           <Flex as='div'
             alignItems='flex-start'

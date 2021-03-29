@@ -130,61 +130,71 @@ export default function TaskList() {
             alignItems='center'
             justifyContent='center'
           >
-            <Text as='span'
-              color='whiteAlpha.600'
-              fontSize='1.6rem'
+            <motion.p
+              initial={{ opacity: 0, y: -100 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ ease: 'easeInOut', duration: 0.6 }}
+            >
+              <Text as='span'
+                color='whiteAlpha.600'
+                fontSize='1.6rem'
 
-              marginRight='0.4rem'
-              paddingTop='0.4rem'
+                marginRight='0.4rem'
+                paddingTop='0.4rem'
+              >
+                <FontAwesomeIcon icon='list-alt' />
+              </Text>
+            </motion.p>
+            <motion.p
+              initial={{ opacity: 0, y: -100 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ ease: 'easeInOut', duration: 0.45 }}
             >
-              <FontAwesomeIcon icon='list-alt' />
-            </Text>
-            <Heading
-              fontSize='2.2rem'
-              marginLeft='0.6rem'
-            >
-              <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ ease: 'easeInOut', duration: 0.2 }}
+              <Heading
+                fontSize='2.2rem'
+                marginLeft='0.6rem'
               >
                 {getTaskGroupSelected().name}
-              </motion.p>
-              
-            </Heading>
+              </Heading>
+            </motion.p>
           </Flex>
 
-          <Flex as='span'
-            direction='column'
-            alignItems='center'
-            justifyContent='center'
-
-            width='6rem'
-            height='6rem'
+          <motion.p
+            initial={{ opacity: 0, y: -100 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ ease: 'easeInOut', duration: 0.45 }}
           >
+            <Flex as='span'
+              direction='column'
+              alignItems='center'
+              justifyContent='center'
 
-            <Text as='span'
-              fontSize='2.7rem'
-              fontWeight='medium'
+              width='6rem'
+              height='6rem'
             >
-              {dateNow.hours}:{dateNow.minutes}
-            </Text>
+              <Text as='span'
+                fontSize='2.7rem'
+                fontWeight='medium'
+              >
+                {dateNow.hours}:{dateNow.minutes}
+              </Text>
 
-            <Text as='span'
-              color='whiteAlpha.800'
-              fontSize='0.8rem'
-              fontWeight='medium'
-            >
-              {dateNow.dayOfWeek}
-            </Text>
-            <Text as='span'
-              color='whiteAlpha.500'
-              fontSize='0.8rem'
-              fontWeight='medium'
-            >
-              {dateNow.day} {dateNow.month} {dateNow.year}
-            </Text>
-          </Flex>
+              <Text as='span'
+                color='whiteAlpha.800'
+                fontSize='0.8rem'
+                fontWeight='medium'
+              >
+                {dateNow.dayOfWeek}
+              </Text>
+              <Text as='span'
+                color='whiteAlpha.500'
+                fontSize='0.8rem'
+                fontWeight='medium'
+              >
+                {dateNow.day} {dateNow.month} {dateNow.year}
+              </Text>
+            </Flex>
+          </motion.p>
         </Flex>
 
         <Flex as='div'
@@ -194,37 +204,48 @@ export default function TaskList() {
           width='100%'
           marginRight='0.8rem'
         >
-          <Input id='input-title'
-            type='text'
-            placeholder='Add new task'
-
-            background='whiteAlpha.300'
-            fontWeight='medium'
-            
-            border='0'
-            width='60%'
-            marginRight='0.3rem'
-            marginTop='5px'
-            marginBottom='5px'
-
-            _focus={{
-              background: 'white',
-              color: 'blue.900'
-            }}
-          />
-          <Button type='submit' onClick={() => handleCreateNewTask()}
-            background='transparent'
-            color='white'
-
-            _hover={{
-              background: 'whiteAlpha.100',
-              color: 'green.400'
-            }}
+          <motion.p
+            initial={{ opacity: 0, width: '0' }}
+            animate={{ opacity: 1, width: '55%' }}
+            transition={{ ease: 'easeInOut', duration: 0.7 }}
           >
-            <FontAwesomeIcon icon='check'/>
-          </Button>
-        </Flex>
+            <Input id='input-title'
+              type='text'
+              placeholder='Add new task'
 
+              background='whiteAlpha.300'
+              fontWeight='medium'
+              
+              border='0'
+              width='100%'
+              marginRight='0.3rem'
+              marginTop='5px'
+              marginBottom='5px'
+
+              _focus={{
+                background: 'white',
+                color: 'blue.900'
+              }}
+            />
+          </motion.p>
+          <motion.p
+            initial={{ opacity: 0, width: '0' }}
+            animate={{ opacity: 1, width: '1rem' }}
+            transition={{ ease: 'easeInOut', duration: 0.3 }}
+          >
+            <Button type='submit' onClick={() => handleCreateNewTask()}
+              background='transparent'
+              color='white'
+
+              _hover={{
+                background: 'whiteAlpha.100',
+                color: 'green.400'
+              }}
+            >
+              <FontAwesomeIcon icon='check'/>
+            </Button>
+          </motion.p>
+        </Flex>
       </Flex>
 
       <Flex as='div'
@@ -245,9 +266,9 @@ export default function TaskList() {
             {getTaskGroupSelected().tasks.length !== 0 ? getTaskGroupSelected().tasks.map((task, indexTask) => (
               task.isCompleted ?
               <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ ease: 'easeInOut', duration: 0.2 }}
+                initial={{ opacity: 0, width: '50%' }}
+                animate={{ opacity: 1, width: '100%' }}
+                transition={{ ease: 'easeInOut', duration: 0.7 }}
               >
                 <ListItem key={indexTask}
                   {...listItemStyle}
@@ -297,9 +318,9 @@ export default function TaskList() {
                 </ListItem>
               </motion.div> : 
               <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ ease: 'easeInOut', duration: 0.2 }}
+                initial={{ opacity: 0, width: '50%' }}
+                animate={{ opacity: 1, width: '100%' }}
+                transition={{ ease: 'easeInOut', duration: 0.7 }}
               >
                 <ListItem key={indexTask}
                   {...listItemStyle}
@@ -357,9 +378,9 @@ export default function TaskList() {
               paddingTop='1rem'
             >
               <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ ease: 'easeInOut', duration: 0.1 }}
+                initial={{ opacity: 0, x: 100 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ ease: 'easeInOut', duration: 0.5 }}
               >
                 No tasks
               </motion.p>
@@ -388,38 +409,44 @@ export default function TaskList() {
           fontWeight='medium'
         >
           <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ ease: 'easeInOut', duration: 0.2 }}
+            initial={{ opacity: 0, x: -100 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ ease: 'easeInOut', duration: 0.4 }}
           >
             {
               getTaskGroupSelected().quantityTasksIncompleted
             } REMAINING TASKS
           </motion.p>
         </Text>
-        <CircularProgress value={getTaskGroupSelected().tasks.length === 0 ? 0 : Math.round(getTaskGroupSelected().quantityTasksCompleted / getTaskGroupSelected().tasks.length * 100)}
-          color='green.500'
-          size='67'
+        <motion.p
+          initial={{ opacity: 0, x: -100 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ ease: 'easeInOut', duration: 0.4 }}
         >
-          <CircularProgressLabel fontSize='1.3rem' fontWeight='medium'>
-            {
-              getTaskGroupSelected().tasks.length === 0 ? 0 : 
-                Math.round(getTaskGroupSelected().quantityTasksCompleted / getTaskGroupSelected().tasks.length * 100)
-            }
-            <Text as='span'
-              position='relative'
-              left='1px'
-              top='-4px'
+          <CircularProgress value={getTaskGroupSelected().tasks.length === 0 ? 0 : Math.round(getTaskGroupSelected().quantityTasksCompleted / getTaskGroupSelected().tasks.length * 100)}
+            color='green.500'
+            size='67'
+          >
+            <CircularProgressLabel fontSize='1.3rem' fontWeight='medium'>
+              {
+                getTaskGroupSelected().tasks.length === 0 ? 0 : 
+                  Math.round(getTaskGroupSelected().quantityTasksCompleted / getTaskGroupSelected().tasks.length * 100)
+              }
+              <Text as='span'
+                position='relative'
+                left='1px'
+                top='-4px'
 
-              color='blackAlpha.800'
+                color='blackAlpha.800'
 
-              fontSize='0.92rem'
-              fontWeight='bold'
-            >
-              %
-            </Text>
-          </CircularProgressLabel>
-        </CircularProgress>
+                fontSize='0.92rem'
+                fontWeight='bold'
+              >
+                %
+              </Text>
+            </CircularProgressLabel>
+          </CircularProgress>
+        </motion.p>
       </Flex>
     </>
   )
