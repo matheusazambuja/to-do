@@ -7,6 +7,7 @@ import { CircularProgress, CircularProgressLabel } from "@chakra-ui/progress"
 
 import { GroupAndTaskListContext } from "../contexts/GroupAndTaskListContext"
 import { GetStaticProps } from "next"
+import { motion } from "framer-motion"
 
 interface DateNow {
   seconds: string,
@@ -104,6 +105,7 @@ export default function TaskList() {
     <>
       <Flex as='header'
         gridArea='header'
+        width='100%'
 
         direction='column'
         alignItems='center'
@@ -141,7 +143,14 @@ export default function TaskList() {
               fontSize='2.2rem'
               marginLeft='0.6rem'
             >
-              {getTaskGroupSelected().name}
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ ease: 'easeInOut', duration: 0.2 }}
+              >
+                {getTaskGroupSelected().name}
+              </motion.p>
+              
             </Heading>
           </Flex>
 
@@ -199,7 +208,8 @@ export default function TaskList() {
             marginBottom='5px'
 
             _focus={{
-              background: 'white'
+              background: 'white',
+              color: 'blue.900'
             }}
           />
           <Button type='submit' onClick={() => handleCreateNewTask()}
@@ -220,6 +230,7 @@ export default function TaskList() {
       <Flex as='div'
         gridArea='content'
         direction='column'
+        width='100%'
 
         padding='0.5rem 4.2rem 1.9rem 1.8rem'
         
@@ -232,110 +243,128 @@ export default function TaskList() {
           <UnorderedList
           >
             {getTaskGroupSelected().tasks.length !== 0 ? getTaskGroupSelected().tasks.map((task, indexTask) => (
-              task.isCompleted ? 
-              <ListItem key={indexTask}
-                {...listItemStyle}
+              task.isCompleted ?
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ ease: 'easeInOut', duration: 0.2 }}
               >
-                <Flex as='div'
-                  alignItems='center'
+                <ListItem key={indexTask}
+                  {...listItemStyle}
                 >
-                  <Button
-                    checked={task.isCompleted}
-                    onClick={() => handleToggleTaskCompletion(indexTask)}
+                  <Flex as='div'
+                    alignItems='center'
+                  >
+                    <Button
+                      checked={task.isCompleted}
+                      onClick={() => handleToggleTaskCompletion(indexTask)}
 
-                    {...buttonsTaskCompletionStyle}
-                    color='green.400'
+                      {...buttonsTaskCompletionStyle}
+                      color='green.400'
+
+                      _hover={{
+                        background: 'whiteAlpha.900',
+                        color: 'gray.500'
+                      }}
+                    >
+                      <FontAwesomeIcon icon='check-circle'/>
+                    </Button>
+
+                    <Text as='s'
+                      color='gray.300'
+                      fontWeight='medium'
+                      marginBottom='5px'
+                    >
+                      {task.title}
+                    </Text>
+                  </Flex>
+                  <Button type='button'
+                    onClick={() => handleRemoveTask(indexTask)}
+
+                    background='red.600'
+                    fontSize='0.9rem'
+
+                    height='2rem'
+                    width='2rem'
+                    marginRight='1rem'
 
                     _hover={{
-                      background: 'whiteAlpha.900',
-                      color: 'gray.500'
+                      background: 'red.610'
                     }}
                   >
-                    <FontAwesomeIcon icon='check-circle'/>
+                    <FontAwesomeIcon icon='trash' />
                   </Button>
-
-                  <Text as='s'
-                    color='gray.300'
-                    fontWeight='medium'
-                    marginBottom='5px'
-                  >
-                    {task.title}
-                  </Text>
-                </Flex>
-                <Button type='button'
-                  onClick={() => handleRemoveTask(indexTask)}
-
-                  background='red.600'
-                  fontSize='0.9rem'
-
-                  height='2rem'
-                  width='2rem'
-                  marginRight='1rem'
-
-                  _hover={{
-                    background: 'red.610'
-                  }}
-                >
-                  <FontAwesomeIcon icon='trash' />
-                </Button>
-              </ListItem> :
-              <ListItem key={indexTask}
-                {...listItemStyle}
+                </ListItem>
+              </motion.div> : 
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ ease: 'easeInOut', duration: 0.2 }}
               >
-                <Flex as='div'
-                  alignItems='center'
+                <ListItem key={indexTask}
+                  {...listItemStyle}
                 >
-                  <Button
-                    checked={task.isCompleted}
-                    onClick={() => handleToggleTaskCompletion(indexTask)}
+                  <Flex as='div'
+                    alignItems='center'
+                  >
+                    <Button
+                      checked={task.isCompleted}
+                      onClick={() => handleToggleTaskCompletion(indexTask)}
 
-                    {...buttonsTaskCompletionStyle}
-                    color='white'
-                
+                      {...buttonsTaskCompletionStyle}
+                      color='white'
+                  
+                      _hover={{
+                        color: 'green.400'
+                      }}
+                    >
+                      <FontAwesomeIcon icon={['far', 'circle']} />
+                    </Button>
+
+                    <Text as='p'
+                      fontWeight='medium'
+                      marginBottom='5px'
+                    >
+                      {task.title}
+                    </Text>
+                  </Flex>
+                  <Button type='button'
+                    onClick={() => handleRemoveTask(indexTask)}
+
+                    background='red.600'
+                    fontSize='0.9rem'
+
+                    height='2rem'
+                    width='2rem'
+                    marginRight='1rem'
+
                     _hover={{
-                      color: 'green.400'
+                      background: 'red.700'
                     }}
                   >
-                    <FontAwesomeIcon icon={['far', 'circle']} />
+                    <FontAwesomeIcon icon='trash' />
                   </Button>
-
-                  <Text as='p'
-                    fontWeight='medium'
-                    marginBottom='5px'
-                  >
-                    {task.title}
-                  </Text>
-                </Flex>
-                <Button type='button'
-                  onClick={() => handleRemoveTask(indexTask)}
-
-                  background='red.600'
-                  fontSize='0.9rem'
-
-                  height='2rem'
-                  width='2rem'
-                  marginRight='1rem'
-
-                  _hover={{
-                    background: 'red.700'
-                  }}
-                >
-                  <FontAwesomeIcon icon='trash' />
-                </Button>
-              </ListItem>
+                </ListItem>
+              </motion.div>
             ))
             :
-              <Text as='p'
-                background='transparent'
-                color='white'
-                fontWeight='medium'
-                fontStyle='italic'
+            <Text as='span'
+              background='transparent'
+              color='white'
+              fontWeight='medium'
+              fontStyle='italic'
 
-                paddingTop='1rem'
+              paddingTop='1rem'
+            >
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ ease: 'easeInOut', duration: 0.1 }}
               >
                 No tasks
-              </Text>
-            }
+              </motion.p>
+            </Text>
+          }
           </UnorderedList>
         </Box>
       
@@ -344,6 +373,8 @@ export default function TaskList() {
         gridArea='footer'
         alignItems='center'
         justifyContent='space-between'
+
+        width='100%'
 
         background='gray.900'
         color='white'
@@ -356,11 +387,16 @@ export default function TaskList() {
           color='whiteAlpha.800'
           fontWeight='medium'
         >
-          {
-            getTaskGroupSelected().quantityTasksIncompleted
-          } REMAINING TASKS
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ ease: 'easeInOut', duration: 0.2 }}
+          >
+            {
+              getTaskGroupSelected().quantityTasksIncompleted
+            } REMAINING TASKS
+          </motion.p>
         </Text>
-
         <CircularProgress value={getTaskGroupSelected().tasks.length === 0 ? 0 : Math.round(getTaskGroupSelected().quantityTasksCompleted / getTaskGroupSelected().tasks.length * 100)}
           color='green.500'
           size='67'

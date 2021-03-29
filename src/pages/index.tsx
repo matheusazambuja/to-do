@@ -24,15 +24,30 @@ export default function Home() {
         transition={{ ease: 'easeIn', duration: 0.2 }}
       >
         <Grid as='div'
-          templateColumns='0.4fr 0.9fr 2.6fr 0.4fr'
-          templateRows='0.6fr 0.6fr 2.8fr 0.4fr 0.6fr'
-          templateAreas="
-            '. . . .'
-            '. taskGroups header .'
-            '. taskGroups content .'
-            '. taskGroups footer .'
-            '. . . .'
-          "
+          templateColumns={{
+            base: '0.5fr 2fr 0.5fr',
+            xl: '0.4fr 1.5fr 2fr 0.4fr'
+          }}
+          templateRows={{
+            base: '1.2fr 0.6fr 2.2fr 0.4fr 0.5fr',
+            xl: '0.6fr 0.6fr 2.8fr 0.4fr 0.6fr'
+          }}
+          templateAreas={{
+            base: `
+              '. taskGroups .' 
+              '. header .' 
+              '. content .' 
+              '. footer .' 
+              '. . .'
+            `,
+            xl: `
+              '. . . .' 
+              '. taskGroups header .' 
+              '. taskGroups content .' 
+              '. taskGroups footer .' 
+              '. . . .'
+            `
+          }}
           height='100vh'
 
           overflow='auto'
