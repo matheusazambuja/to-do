@@ -73,13 +73,20 @@ export default function Home(props: HomeProps) {
 
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const resultContextCookies = JSON.parse(ctx.req.cookies.infoTasksUser)
+  let resultCokkies = JSON.parse(JSON.stringify(ctx.req.cookies))
 
-  return {
-    props: {
-      taskGroupsList: resultContextCookies.taskGroupsList,
-      iat: Number(resultContextCookies.iat),
-      expiration: Number(resultContextCookies.expiration),
+  if (Object.keys(resultCokkies).includes('infoTasksUser')) {
+    resultCokkies = JSON.parse(resultCokkies.infoTasksUser)
+    return {
+      props: {
+        taskGroupsList: resultCokkies.taskGroupsList ?? {} as TaskGroup[],
+        iat: resultCokkies.iat,
+        expiration: resultCokkies.expiration
+      }
+    }
+  } else {
+    return {
+      props: {} as HomeProps
     }
   }
 }
