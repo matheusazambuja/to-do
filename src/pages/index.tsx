@@ -1,17 +1,19 @@
 import { Box, Flex, Grid, Heading, ListItem, UnorderedList } from '@chakra-ui/layout'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { motion, useMotionValue, useTransform } from 'framer-motion'
+import { GetServerSideProps } from 'next'
 import Head from 'next/head'
 import GroupTaskList from '../components/GroupTaskList'
 import TaskList from '../components/TaskList'
-import { GroupAndTaskListProvider } from '../contexts/GroupAndTaskListContext'
+import { GroupAndTaskListProvider, TaskGroup } from '../contexts/GroupAndTaskListContext'
 
-export default function Home() {
-  const variants = {
-    hidden: { opacity: 0 },
-    visible: { opacity: 1 },
-  }
+interface HomeProps {
+  iat: number
+  expiration: number
+  taskGroupsList: TaskGroup[]
+}
 
+export default function Home(props: HomeProps) {
   return (
     <>
       <Head>
@@ -26,7 +28,7 @@ export default function Home() {
         <Grid as='div'
           templateColumns={{
             base: '0.5fr 2fr 0.5fr',
-            xl: '0.4fr 1.5fr 2fr 0.4fr'
+            xl: '0.4fr 1.4fr 2.1fr 0.4fr'
           }}
           templateRows={{
             base: '1.2fr 0.6fr 2.2fr 0.4fr 0.5fr',
@@ -54,7 +56,11 @@ export default function Home() {
 
           background='gray.600'
         >
-          <GroupAndTaskListProvider>
+          <GroupAndTaskListProvider 
+            iat={props.iat}
+            expiration={props.expiration}
+            taskGroupsList={props.taskGroupsList}
+          >
             <GroupTaskList />
             <TaskList />
           </GroupAndTaskListProvider>
@@ -63,4 +69,17 @@ export default function Home() {
       </motion.div>
     </>
   )
+}
+
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const resultContextCookies = JSON.parse(ctx.req.cookies.infoTasksUser)
+
+  return {
+    props: {
+      taskGroupsList: resultContextCookies.taskGroupsList,
+      iat: Number(resultContextCookies.iat),
+      expiration: Number(resultContextCookies.expiration),
+    }
+  }
 }

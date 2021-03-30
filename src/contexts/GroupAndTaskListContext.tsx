@@ -1,4 +1,5 @@
-import { createContext, ReactNode, useEffect, useState } from "react";
+import Cookies from 'js-cookie'
+import { createContext, ReactNode, useEffect, useState } from "react"
 
 export interface Task {
   title: string
@@ -26,22 +27,39 @@ interface GroupAndTaskListContextData {
 
 interface GroupAndTaskListProviderProps {
   children: ReactNode
+  iat: number
+  expiration: number
+  taskGroupsList: TaskGroup[]
 }
 
 export const GroupAndTaskListContext = createContext(
   {} as GroupAndTaskListContextData
 )
 
-export function GroupAndTaskListProvider({ children }: GroupAndTaskListProviderProps ) {
+export function GroupAndTaskListProvider({
+  children,
+  ...rest
+}: GroupAndTaskListProviderProps ) {
 
-  const [taskGroupsList, setTaskGroupsList] = useState<TaskGroup[]>([{
-      tasks: [] as Task[],
-      name: 'General',
-      isSelected: true,
-      quantityTasksIncompleted: 0,
-      quantityTasksCompleted: 0
-    }]
-  )
+  const [taskGroupsList, setTaskGroupsList] = useState<TaskGroup[]>(rest.taskGroupsList ?? [{
+    tasks: [] as Task[],
+    name: 'General',
+    isSelected: true,
+    quantityTasksIncompleted: 0,
+    quantityTasksCompleted: 0
+  }])
+
+  useEffect(() => {
+    const now = Math.floor(Date.now() / 1000)
+    const payload = {
+      taskGroupsList: taskGroupsList,
+      iat: now,
+      expiration: now + (60 * 60 * 24 * 2)
+    }
+    Cookies.set('infoTasksUser', JSON.stringify({
+      ...payload
+    }))
+  }, [taskGroupsList])
 
   function createNewTaskGroup(groupName: string) {
 
@@ -67,8 +85,6 @@ export function GroupAndTaskListProvider({ children }: GroupAndTaskListProviderP
     else {
 
       const newTaskGroupsList: TaskGroup[] = taskGroupsList.filter((group, groupIndex) => groupIndex !== index)
-
-      // setTaskGroupsList([ ...newTaskGroupsList ])
 
       selectTaskGroup(indexTaskGroupGeneral, newTaskGroupsList)
     }

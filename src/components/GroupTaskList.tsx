@@ -1,4 +1,3 @@
-
 import { Button, ButtonProps } from '@chakra-ui/button'
 import { Input } from '@chakra-ui/input'
 import { Box, Flex, Text } from '@chakra-ui/layout'
@@ -96,7 +95,7 @@ export default function GroupTaskList() {
       >
         {taskGroupsList.map((group, indexTaskGroup) => (
           group.isSelected ? 
-          <motion.div
+          <motion.section key={Number(indexTaskGroup)}
             initial={{ opacity: 0, x: -100 }}
             animate={{ opacity: 1, x: 0 }}
             whileHover={{ 
@@ -104,9 +103,8 @@ export default function GroupTaskList() {
               y: -3,
               transition: { duration: 0.2 }
             }}
-            transition={{ ease: 'easeInOut', duration: 0.5 }}
           >
-            <Button as='div' key={Number(indexTaskGroup)}
+            <Button as='div'
               {...buttonTaskGroupsStyle}
 
               background='gray.600'
@@ -156,9 +154,9 @@ export default function GroupTaskList() {
                 </Text>
               </Flex>
             </Button> 
-          </motion.div>
+          </motion.section>
           : 
-          <motion.div
+          <motion.section key={Number(indexTaskGroup)}
             initial={{ opacity: 0, x: -100 }}
             animate={{ opacity: 1, x: 0 }}
             whileHover={{ 
@@ -166,9 +164,8 @@ export default function GroupTaskList() {
               y: -3,
               transition: { duration: 0.2 }
             }}
-            transition={{ ease: 'easeInOut', duration: 0.5 }}
           >
-            <Button as='div' key={Number(indexTaskGroup)} onClick={() => selectTaskGroup(indexTaskGroup, taskGroupsList)}
+            <Button as='div' onClick={() => selectTaskGroup(indexTaskGroup, taskGroupsList)}
               {...buttonTaskGroupsStyle}
 
               background='gray.700'
@@ -203,7 +200,7 @@ export default function GroupTaskList() {
                 </Text>
               </Flex>
             </Button>
-          </motion.div>
+          </motion.section>
           ))
         }
         {!isClickedButtonNewGroup ?

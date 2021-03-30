@@ -145,7 +145,7 @@ export default function TaskList() {
                 <FontAwesomeIcon icon='list-alt' />
               </Text>
             </motion.p>
-            <motion.p
+            <motion.span
               initial={{ opacity: 0, y: -100 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ ease: 'easeInOut', duration: 0.45 }}
@@ -156,7 +156,7 @@ export default function TaskList() {
               >
                 {getTaskGroupSelected().name}
               </Heading>
-            </motion.p>
+            </motion.span>
           </Flex>
 
           <motion.p
@@ -204,7 +204,7 @@ export default function TaskList() {
           width='100%'
           marginRight='0.8rem'
         >
-          <motion.p
+          <motion.div
             initial={{ opacity: 0, width: '0' }}
             animate={{ opacity: 1, width: '55%' }}
             transition={{ ease: 'easeInOut', duration: 0.7 }}
@@ -227,8 +227,8 @@ export default function TaskList() {
                 color: 'blue.900'
               }}
             />
-          </motion.p>
-          <motion.p
+          </motion.div>
+          <motion.div
             initial={{ opacity: 0, width: '0' }}
             animate={{ opacity: 1, width: '1rem' }}
             transition={{ ease: 'easeInOut', duration: 0.3 }}
@@ -244,7 +244,7 @@ export default function TaskList() {
             >
               <FontAwesomeIcon icon='check'/>
             </Button>
-          </motion.p>
+          </motion.div>
         </Flex>
       </Flex>
 
@@ -265,7 +265,7 @@ export default function TaskList() {
           >
             {getTaskGroupSelected().tasks.length !== 0 ? getTaskGroupSelected().tasks.map((task, indexTask) => (
               task.isCompleted ?
-              <motion.div
+              <motion.section key={indexTask}
                 initial={{ opacity: 0, width: '50%' }}
                 animate={{ opacity: 1, width: '100%' }}
                 transition={{ ease: 'easeInOut', duration: 0.7 }}
@@ -316,8 +316,9 @@ export default function TaskList() {
                     <FontAwesomeIcon icon='trash' />
                   </Button>
                 </ListItem>
-              </motion.div> : 
-              <motion.div
+              </motion.section>
+              :
+              <motion.section key={indexTask}
                 initial={{ opacity: 0, width: '50%' }}
                 animate={{ opacity: 1, width: '100%' }}
                 transition={{ ease: 'easeInOut', duration: 0.7 }}
@@ -366,7 +367,7 @@ export default function TaskList() {
                     <FontAwesomeIcon icon='trash' />
                   </Button>
                 </ListItem>
-              </motion.div>
+              </motion.section>
             ))
             :
             <Text as='span'
@@ -418,7 +419,7 @@ export default function TaskList() {
             } REMAINING TASKS
           </motion.p>
         </Text>
-        <motion.p
+        <motion.div
           initial={{ opacity: 0, x: -100 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ ease: 'easeInOut', duration: 0.4 }}
@@ -446,7 +447,7 @@ export default function TaskList() {
               </Text>
             </CircularProgressLabel>
           </CircularProgress>
-        </motion.p>
+        </motion.div>
       </Flex>
     </>
   )
