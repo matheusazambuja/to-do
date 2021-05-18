@@ -1,8 +1,50 @@
 import { theme, extendTheme } from '@chakra-ui/react'
-import { createBreakpoints } from '@chakra-ui/theme-tools'
 
 
 export const customTheme = extendTheme({
+  config: {
+    useSystemColorMode: false,
+  },
+  styles: {
+    global: {
+      '*': {
+        margin: 0,
+        padding: 0,
+        boxSizing: 'border-box'
+      },
+
+      body: {
+        background: 'gray.50'
+      },
+
+      'html, body': {
+        height: '100%'
+      },
+
+      'body, input, textarea, button': {
+        font: '500 1rem Inter, sans-serif',
+      },
+
+      button: {
+        cursor: 'pointer'
+      },
+
+      'h1, h2, h3, h4, h5, h6': {
+        fontWeight: 600,
+        fontFamily: 'Lexend, sans-serif',
+        color: 'gray.800'
+      },
+
+      h1: {
+        fontSize: '2rem'
+      },
+
+      h2: {
+        fontSize: '1.5rem'
+      },
+
+    }
+  },
   breakpoints: {
     ...theme.breakpoints
   },
@@ -22,14 +64,16 @@ export const customTheme = extendTheme({
     ...theme.colors,
     gray: {
       ...theme.colors.gray,
-      100: "#f0f1f3",
-      300: '#D8D8D8',
-      330: '#DCDDE0',
-      500: '#2D2D38',
-      600: '#29292E',
-      700: '#202024',
-      900: '#666',
-      1000: '#202024'
+      50: '#F7F8FA',
+      100: '#E6E8EB',
+      200: '#AFB2B1',
+      500: '#494D4B',
+      600: '#37474F',
+      700: '#282A36',
+      800: '#24283B',
+      830: '#202024',
+      850: '#1F2335',
+      900: '#121214'
     },
     blue: {
       ...theme.colors.blue,
